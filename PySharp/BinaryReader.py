@@ -149,6 +149,5 @@ def WriteString(f, text, encoding):
         else:
             f.write(struct.pack("B", sync2 - (0x40 * (add_value))))
         f.write(struct.pack("B", add_value))
-
     if text_size > 0:
         f.write(encoded_text)
