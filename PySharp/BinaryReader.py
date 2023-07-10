@@ -9,77 +9,113 @@ import struct
 
 
 # Int
-def ReadInt16(f):
-    return struct.unpack("<h", f.read(2))[0]
+def ReadInt16(f, big=False):
+    if big == True:
+        return struct.unpack(">h", f.read(2))[0]
+    else:
+        return struct.unpack("<h", f.read(2))[0]
 
 
-def WriteInt16(f, number):
+def WriteInt16(f, number, big=False):
     if isinstance(number, str):
         number = int(number)
     if number > 0x7FFF:
         raise Exception("Int16 overflow")
-    f.write(struct.pack("<h", number))
+    if big == True:
+        f.write(struct.pack(">h", number))
+    else:
+        f.write(struct.pack("<h", number))
 
 
-def ReadInt32(f):
-    return struct.unpack("<i", f.read(4))[0]
+def ReadInt32(f, big=False):
+    if big == True:
+        return struct.unpack(">i", f.read(4))[0]
+    else:
+        return struct.unpack("<i", f.read(4))[0]
 
 
-def WriteInt32(f, number):
+def WriteInt32(f, number, big=False):
     if isinstance(number, str):
         number = int(number)
     if number > 0x7FFFFFFF:
         raise Exception("Int32 overflow")
-    f.write(struct.pack("<i", number))
+    if big == True:
+        f.write(struct.pack(">i", number))
+    else:
+        f.write(struct.pack("<i", number))
 
 
-def ReadInt64(f):
-    return struct.unpack("<q", f.read(8))[0]
+def ReadInt64(f, big=False):
+    if big == True:
+        return struct.unpack(">q", f.read(8))[0]
+    else:
+        return struct.unpack("<q", f.read(8))[0]
 
 
-def WriteInt64(f, number):
+def WriteInt64(f, number, big=False):
     if isinstance(number, str):
         number = int(number)
     if number > 0x7FFFFFFFFFFFFFFF:
         raise Exception("Int64 overflow")
-    f.write(struct.pack("<q", number))
+    if big == True:
+        f.write(struct.pack(">q", number))
+    else:
+        f.write(struct.pack("<q", number))
 
 
 # UInt
-def ReadUInt16(f):
-    return struct.unpack("<H", f.read(2))[0]
+def ReadUInt16(f, big=False):
+    if big == True:
+        return struct.unpack(">H", f.read(2))[0]
+    else:
+        return struct.unpack("<H", f.read(2))[0]
 
 
-def WriteUInt16(f, number):
+def WriteUInt16(f, number, big=False):
     if isinstance(number, str):
         number = int(number)
     if number > 0xFFFF:
         raise Exception("UInt16 overflow")
-    f.write(struct.pack("<H", number))
+    if big == True:
+        f.write(struct.pack(">H", number))
+    else:
+        f.write(struct.pack("<H", number))
 
 
-def ReadUInt32(f):
-    return struct.unpack("<I", f.read(4))[0]
+def ReadUInt32(f, big=False):
+    if big == True:
+        return struct.unpack(">I", f.read(4))[0]
+    else:
+        return struct.unpack("<I", f.read(4))[0]
 
 
-def WriteUInt32(f, number):
+def WriteUInt32(f, number, big=False):
     if isinstance(number, str):
         number = int(number)
     if number > 0xFFFFFFFF:
         raise Exception("UInt32 overflow")
-    f.write(struct.pack("<I", number))
+    if big == True:
+        f.write(struct.pack(">I", number))
+    else:
+        f.write(struct.pack("<I", number))
 
 
-def ReadUInt64(f):
-    return struct.unpack("<Q", f.read(8))[0]
+def ReadUInt64(f, big=False):
+    if big == True:
+        return struct.unpack(">Q", f.read(8))[0]
+    else:
+        return struct.unpack("<Q", f.read(8))[0]
 
 
-def WriteUInt64(f, number):
+def WriteUInt64(f, number, big=False):
     if isinstance(number, str):
         number = int(number)
     if number > 0xFFFFFFFFFFFFFFFF:
         raise Exception("UInt64 overflow")
-    f.write(struct.pack("<Q", number))
+    if big == True:
+        f.write(struct.pack(">Q", number))
+    else:
+        f.write(struct.pack("<Q", number))
 
 
 # String
