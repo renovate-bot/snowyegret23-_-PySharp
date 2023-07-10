@@ -1,7 +1,7 @@
 import struct
 import sys
 import csv
-from PySharp.data import *
+from PySharp.BinaryReader import *
 
 
 def bin_extract():
