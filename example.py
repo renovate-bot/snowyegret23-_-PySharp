@@ -1,7 +1,7 @@
 import struct
 import sys
 import csv
-from CSData.data import *
+from PySharp.data import *
 
 
 def bin_extract():
@@ -14,12 +14,13 @@ def bin_extract():
 
 
 def bin_repack():
-    data_lst = [["1", "test1"], ["2", "test2"], ["-3", "test3"], ["4", "test4"]]
-    with open("data_repack.bin", "wb") as f:
-        WriteInt16(f, len(data_lst))
-        for data in data_lst:
-            WriteInt64(f, data[0])
-            WriteString(f, data[1], "utf-8")
+    with open("data.csv", "r", newline="", encoding="utf-8") as f:
+        with open("data_repack.bin", "wb") as d:
+            csv_list = list(csv.reader(f))
+            WriteInt16(d, len(csv_list))
+            for i in range(len(csv_list)):
+                WriteInt64(d, csv_list[i][0])
+                WriteString(d, csv_list[i][1], "utf-8")
 
 
 def same_check():
