@@ -119,17 +119,32 @@ def WriteUInt64(f, number, big=False):
 
 
 # String
-# 출처: https://cafe.naver.com/hansicgu/29903, "행복한나라"님
+# code from SYSTEM.IO.BINARYREADER
+def Read7BitEncodedInt(f):
+    var1 = 0
+    var2 = 0
+    for i in range(5):
+        b = int.from_bytes(f.read(1), byteorder="little")
+        var1 |= (b & 0x7F) << var2
+        var2 += 7
+        if (b & (0x80)) == 0 and i < 5:
+            return var1
+        elif 5 <= i:
+            raise IOError(
+                "Too many bytes in what should have been a 7 bit encoded Int32."
+            )
+
+
 def ReadString(f, encoding):
-    string_length = ord(f.read(1))
-    if string_length >= 0x7F:
-        add_len = f.read(1)
-        if 1 <= ord(add_len) <= 255:
-            add_len = ord(add_len)
-            sync = string_length - (0x40 * add_len)
-            string_length = (string_length << 1) - sync + (0x40 * (add_len - 2))
-    text = f.read(string_length)
-    return text.decode(encoding)
+    num = Read7BitEncodedInt(f)
+    if num is None:
+        raise IOError("Read7BitEncodedInt returned None")
+    if num < 0:
+        raise IOError("Invalid binary file (string len < 0)")
+    if num == 0:
+        return ""
+    string_bytes = f.read(num)
+    return string_bytes.decode(encoding)
 
 
 # 출처: https://cafe.naver.com/hansicgu/29903, "행복한나라"님
