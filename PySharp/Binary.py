@@ -147,22 +147,19 @@ def ReadString(f, encoding):
     return string_bytes.decode(encoding)
 
 
-# 출처: https://cafe.naver.com/hansicgu/29903, "행복한나라"님
+# code from https://github.com/GoobyCorp/StreamIO/StreamIO.py
+def WriteBitEncodedInt(f, text_length):
+    data = b""
+    num = text_length
+    while num >= 0x80:
+        data += bytes([((num | 0x80) & 0xFF)])
+        num >>= 7
+    data += bytes([num & 0xFF])
+    f.write(data)
+
+
+# code from https://github.com/GoobyCorp/StreamIO/StreamIO.py
 def WriteString(f, text, encoding):
-    encoded_text = text.encode(encoding)
-    text_size = len(encoded_text)
-    if text_size < 0x7F:
-        f.write(struct.pack("B", text_size))
-    elif 0x7F <= text_size <= 0xFF:
-        f.write(struct.pack("B", text_size))
-        f.write(struct.pack("B", 0x01))
-    elif 0xFF < text_size:
-        add_value = text_size // 0x80
-        sync2 = text_size - (0x40 * add_value)
-        if add_value >= 0x02:
-            f.write(struct.pack("B", sync2 - (0x40 * (add_value)) + 0x80))
-        else:
-            f.write(struct.pack("B", sync2 - (0x40 * (add_value))))
-        f.write(struct.pack("B", add_value))
-    if text_size > 0:
-        f.write(encoded_text)
+    writeText = text.encode(encoding)
+    WriteBitEncodedInt(f, len(writeText))
+    f.write(writeText)
